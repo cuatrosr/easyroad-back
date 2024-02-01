@@ -21,18 +21,18 @@ export class ProjectsService {
   }
 
   async findById(id: string) {
-    return this.projectsRepository.findById(id);
+    return await this.projectsRepository.findById(id);
   }
 
   async findByName(name: string) {
-    return this.projectsRepository.findByName(name);
+    return await this.projectsRepository.findByName(name);
   }
 
   async updateProject(id: string, updateProjectDTO: UpdateProjectDTO) {
-    return this.projectsRepository.updateProject(id, updateProjectDTO);
+    return await this.projectsRepository.updateProject(id, updateProjectDTO);
   }
 
   async deleteProject(id: string) {
-    return this.projectsRepository.deleteProject(id);
+    return await this.projectsRepository.deleteProject(id);
   }
 }

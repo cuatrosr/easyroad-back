@@ -1,26 +1,35 @@
-# Use an official Node runtime as a parent image
-FROM node:18
+FROM node:20-alpine3.18 AS base
 
-# Set the working directory in the container
-WORKDIR /app
+ENV DIR /project
+WORKDIR $DIR
+ARG NPM_TOKEN
 
-# Copy package.json and package-lock.json to the working directory
-COPY package.json pnpm-lock.yaml ./
+FROM base AS build
 
-# Install pnpm globally
+RUN apk update && apk add --no-cache dumb-init=1.2.5-r2
+
+COPY package.json pnpm-lock.yaml $DIR
 RUN npm install -g pnpm
+RUN echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > "$DIR/.npmrc" && \
+  pnpm install --frozen-lockfile && \
+  rm -f .npmrc
 
-# Install dependencies
-RUN pnpm install
+COPY tsconfig*.json $DIR
+COPY nest-cli.json $DIR
+COPY src $DIR/src
 
-# Copy the remaining application code to the working directory
-COPY . .
+RUN pnpm build && \
+  pnpm prune --prod --config.ignore-scripts=true
 
-# Build the Next.js app
-RUN pnpm build
+FROM base AS production
 
-# Expose the port that the app will run on
-EXPOSE 3000
+ENV NODE_ENV=production
+ENV USER=node
 
-# Define the command to run the application
-CMD ["pnpm", "start"]
+COPY --from=build /usr/bin/dumb-init /usr/bin/dumb-init
+COPY --from=build $DIR/node_modules $DIR/node_modules
+COPY --from=build $DIR/dist $DIR/dist
+
+USER $USER
+EXPOSE $PORT
+CMD ["dumb-init", "node", "dist/main.js"]

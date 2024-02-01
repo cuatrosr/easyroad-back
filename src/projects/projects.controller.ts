@@ -6,6 +6,8 @@ import {
   UseInterceptors,
   Controller,
   HttpCode,
+  Logger,
+  Inject,
   Delete,
   Patch,
   Param,
@@ -14,9 +16,10 @@ import {
   Get,
 } from '@nestjs/common';
 import {
-  ApiBadRequestResponse,
   ApiInternalServerErrorResponse,
+  ApiBadRequestResponse,
   ApiNotFoundResponse,
+  ApiCreatedResponse,
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
@@ -29,11 +32,14 @@ import {
 @Controller('projects')
 @UseInterceptors(MongooseClassSerializerInterceptor(Project))
 export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(
+    private readonly projectsService: ProjectsService,
+    @Inject(Logger) private readonly logger: Logger,
+  ) {}
 
   @Post()
   @HttpCode(201)
-  @ApiOkResponse({
+  @ApiCreatedResponse({
     description: 'El proyecto fue creado exitosamente',
   })
   @ApiBadRequestResponse({
@@ -42,9 +48,12 @@ export class ProjectsController {
   @ApiInternalServerErrorResponse({
     description: 'Error en la base de datos',
   })
-  createProject(@Body() createProjectDTO: CreateProjectDTO) {
-    this.checkIfProjectNameExists(createProjectDTO.name);
-    return this.projectsService.createProject(createProjectDTO);
+  async createProject(@Body() createProjectDTO: CreateProjectDTO) {
+    this.logger.log('[Back] Project endpoint called!');
+    await this.checkIfProjectNameExists(createProjectDTO.name);
+    const project = await this.projectsService.createProject(createProjectDTO);
+    this.logger.log(`[Back] Proyecto creado: ${project.name}`);
+    return project;
   }
 
   @HttpCode(200)
@@ -55,8 +64,11 @@ export class ProjectsController {
     description: 'Error en la base de datos',
   })
   @Get()
-  findAll() {
-    return this.projectsService.findAll();
+  async findAll() {
+    this.logger.log('[Back] Project endpoint called!');
+    const projects = await this.projectsService.findAll();
+    this.logger.log('[Back] Retornando todos los proyectos');
+    return projects;
   }
 
   @HttpCode(200)
@@ -70,12 +82,18 @@ export class ProjectsController {
     description: 'Error en la base de datos',
   })
   @Patch(':id')
-  updateProject(
+  async updateProject(
     @Param('id') id: string,
     @Body() updateProjectDTO: UpdateProjectDTO,
   ) {
-    this.checkIfProjectExists(id);
-    return this.projectsService.updateProject(id, updateProjectDTO);
+    this.logger.log('[Back] Project endpoint called!');
+    await this.checkIfProjectExists(id);
+    const project = await this.projectsService.updateProject(
+      id,
+      updateProjectDTO,
+    );
+    this.logger.log(`[Back] Proyecto actualizado: ${id}`);
+    return project;
   }
 
   @HttpCode(200)
@@ -89,18 +107,29 @@ export class ProjectsController {
     description: 'Error en la base de datos',
   })
   @Delete(':id')
-  deleteProject(@Param('id') id: string) {
-    this.checkIfProjectExists(id);
-    return this.projectsService.deleteProject(id);
+  async deleteProject(@Param('id') id: string) {
+    this.logger.log('[Back] Project endpoint called!');
+    await this.checkIfProjectExists(id);
+    const project = await this.projectsService.deleteProject(id);
+    this.logger.log(`[Back] Proyecto eliminado: ${id}`);
+    return project;
   }
 
   private async checkIfProjectNameExists(name: string) {
-    if (await this.projectsService.findByName(name))
+    this.logger.log(
+      `[Back] Validando si el nombre del proyecto ya existe: ${name}`,
+    );
+    if (await this.projectsService.findByName(name)) {
+      this.logger.warn(`[Back] El nombre del proyecto ya existe: ${name}`);
       HttpBadRequest('El nombre del proyecto ya existe');
+    }
   }
 
   private async checkIfProjectExists(id: string) {
-    if (!(await this.projectsService.findById(id)))
+    this.logger.log(`[Back] Validando si el proyecto ya existe: ${id}`);
+    if (!(await this.projectsService.findById(id))) {
+      this.logger.warn(`[Back] El proyecto no existe: ${id}`);
       HttpNotFound('El proyecto no existe');
+    }
   }
 }

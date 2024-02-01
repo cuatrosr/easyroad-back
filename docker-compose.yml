@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.8'
 
 services:
   mongo:
@@ -10,6 +10,31 @@ services:
       - '27017:27017'
     volumes:
       - mongo:/data/db
+  
+  my-service-production:
+    container_name: my-service-production
+    build:
+      target: production
+      context: .
+      args:
+        - PORT=${PORT}
+    depends_on:
+      - mongo
+    links:
+      - mongo
+    env_file:
+      - .env
+    ports:
+      - "${PORT}:${PORT}"
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: "512m"
+        reservations:
+          cpus: "0.25"
+          memory: "256m"
 
 volumes:
   mongo:
+  node_modules:
