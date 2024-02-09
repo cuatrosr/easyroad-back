@@ -12,8 +12,8 @@ export class ProjectsService {
     private readonly projectsRepository: ProjectsRepository,
   ) {}
 
-  async createProject(createProjectDTO: CreateProjectDTO) {
-    return await this.projectsRepository.createProject(createProjectDTO);
+  async createProject(createProjectDTO: CreateProjectDTO, image: string) {
+    return await this.projectsRepository.createProject(createProjectDTO, image);
   }
 
   async findAll() {

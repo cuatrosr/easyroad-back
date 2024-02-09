@@ -1,7 +1,9 @@
 import MongooseClassSerializerInterceptor from '../utils/interceptors/mongooseClassSerializer.interceptor';
 import { CreateProjectDTO, UpdateProjectDTO } from './dtos/project.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { ProjectsService } from './projects.service';
 import { Project } from './schemas/project.schema';
+import { unlinkSync } from 'fs';
 import {
   UseInterceptors,
   Controller,
@@ -14,6 +16,7 @@ import {
   Post,
   Body,
   Get,
+  UploadedFile,
 } from '@nestjs/common';
 import {
   ApiInternalServerErrorResponse,
@@ -48,10 +51,17 @@ export class ProjectsController {
   @ApiInternalServerErrorResponse({
     description: 'Error en la base de datos',
   })
-  async createProject(@Body() createProjectDTO: CreateProjectDTO) {
+  @UseInterceptors(FileInterceptor('image'))
+  async createProject(
+    @UploadedFile() image: Express.Multer.File,
+    @Body() createProjectDTO: CreateProjectDTO,
+  ) {
     this.logger.log('[Back] Project endpoint called!');
-    await this.checkIfProjectNameExists(createProjectDTO.name);
-    const project = await this.projectsService.createProject(createProjectDTO);
+    await this.checkIfProjectNameExists(createProjectDTO.name, image);
+    const project = await this.projectsService.createProject(
+      createProjectDTO,
+      image.filename,
+    );
     this.logger.log(`[Back] Proyecto creado: ${project.name}`);
     return project;
   }
@@ -115,12 +125,16 @@ export class ProjectsController {
     return project;
   }
 
-  private async checkIfProjectNameExists(name: string) {
+  private async checkIfProjectNameExists(
+    name: string,
+    image: Express.Multer.File,
+  ) {
     this.logger.log(
       `[Back] Validando si el nombre del proyecto ya existe: ${name}`,
     );
     if (await this.projectsService.findByName(name)) {
       this.logger.warn(`[Back] El nombre del proyecto ya existe: ${name}`);
+      unlinkSync(image.path);
       HttpBadRequest('El nombre del proyecto ya existe');
     }
   }

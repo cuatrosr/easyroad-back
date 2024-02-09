@@ -4,7 +4,10 @@ import { Project } from '../schemas/project.schema';
 export const PROJECTS_REPOSITORY = 'ProjectsRepository';
 
 export interface ProjectsRepository {
-  createProject(createProjectDTO: CreateProjectDTO): Promise<Project>;
+  createProject(
+    createProjectDTO: CreateProjectDTO,
+    image: string,
+  ): Promise<Project>;
   findAll(): Promise<Project[]>;
   findById(id: string): Promise<Project | null>;
   findByName(name: string): Promise<Project | null>;

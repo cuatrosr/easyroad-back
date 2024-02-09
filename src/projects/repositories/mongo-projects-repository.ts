@@ -12,11 +12,13 @@ export class MongoProjectsRepository implements ProjectsRepository {
     private readonly projectModel: ProjectModel,
   ) {}
 
-  async createProject(createProjectDTO: CreateProjectDTO) {
-    return await this.projectModel.create(createProjectDTO).catch(() => {
-      this.logger.error(`[Back] Error en la base de datos`);
-      return HttpMongoError('Error en la base de datos');
-    });
+  async createProject(createProjectDTO: CreateProjectDTO, image: string) {
+    return await this.projectModel
+      .create({ ...createProjectDTO, image })
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
   }
 
   async findAll() {
@@ -44,7 +46,6 @@ export class MongoProjectsRepository implements ProjectsRepository {
       .findOne({ name, isActive: true })
       .exec()
       .catch(() => {
-        this.logger.error(`[Back] Error en la base de datos`);
         return HttpMongoError('Error en la base de datos');
       });
   }

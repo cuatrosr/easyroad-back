@@ -9,11 +9,14 @@ export class Project {
   @Transform(({ value }) => value.toString())
   _id: Types.ObjectId;
 
-  @Prop({ required: true, unique: true })
+  @Prop({ required: true })
   name: string;
 
   @Prop()
   description: string;
+
+  @Prop()
+  image: string;
 
   @Prop({ default: true })
   @Exclude()
