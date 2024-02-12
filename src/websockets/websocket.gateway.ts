@@ -2,6 +2,7 @@ import { Server, Socket } from 'socket.io';
 import {
   OnGatewayConnection,
   OnGatewayDisconnect,
+  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
@@ -15,6 +16,12 @@ export class WebsocketGateway
 
   handleConnection(client: Socket) {
     console.log(`Client connected: ${client.id}`);
+  }
+
+  @SubscribeMessage('heartbeat')
+  handleHeartbeat(client: Socket, payload: any) {
+    console.log('Heartbeat received: ', payload);
+    this.server.emit('heartbeat', payload);
   }
 
   handleDisconnect(client: Socket) {
