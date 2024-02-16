@@ -16,12 +16,13 @@ async function bootstrap() {
   });
   app.useGlobalPipes(
     new ValidationPipe({
-      validateCustomDecorators: true,
       whitelist: true,
+      transform: true,
       forbidNonWhitelisted: true,
+      validateCustomDecorators: true,
     }),
   );
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter(app.get(Logger)));
 
   const config = new DocumentBuilder()
     .setTitle('Easy Road Back')

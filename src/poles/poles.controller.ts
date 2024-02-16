@@ -1,4 +1,6 @@
 import MongooseClassSerializerInterceptor from '../utils/interceptors/mongooseClassSerializer.interceptor';
+import { HttpBadRequest } from '../utils/exceptions/http.exception';
+import { ProjectsService } from 'src/projects/projects.service';
 import { CreatePoleDTO, UpdatePoleDTO } from './dtos/pole.dto';
 import { PolesService } from './poles.service';
 import { Pole } from './schemas/pole.schema';
@@ -28,6 +30,7 @@ import {
 export class PolesController {
   constructor(
     private readonly polesService: PolesService,
+    private readonly projectsService: ProjectsService,
     @Inject(Logger) private readonly logger: Logger,
   ) {}
 
@@ -41,9 +44,15 @@ export class PolesController {
   })
   async createPole(@Body() createPoleDTO: CreatePoleDTO) {
     this.logger.log('[Back] Pole endpoint called!');
+    await this.checkIfProjectExists(createPoleDTO.project);
     const pole = await this.polesService.createPole(createPoleDTO);
     this.logger.log(`[Back] Poste creado: ${pole.serial}`);
     return pole;
+  }
+
+  private async checkIfProjectExists(project: string) {
+    if (!(await this.projectsService.findById(project)))
+      HttpBadRequest('El proyecto no existe');
   }
 
   @HttpCode(200)

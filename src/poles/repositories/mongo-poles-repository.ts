@@ -39,11 +39,61 @@ export class MongoPolesRepository implements PolesRepository {
       });
   }
 
+  async findBySerial(serial: string) {
+    return await this.poleModel
+      .findOne({ serial, isActive: true })
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
+
+  async findBySocket(socket: string) {
+    return await this.poleModel
+      .findOne({ socket, isActive: true })
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
+
   async updatePole(id: string, updatePoleDTO: UpdatePoleDTO) {
     return await this.poleModel
       .findByIdAndUpdate(id, updatePoleDTO, {
         new: true,
       })
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
+
+  async updateStateHeartbeat(socket: string, state: string) {
+    return await this.poleModel
+      .findOneAndUpdate({ socket }, { state }, { new: true })
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
+
+  async updateSocket(serial: string, socket: string) {
+    return await this.poleModel
+      .findOneAndUpdate({ serial }, { socket }, { new: true })
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
+
+  async updateSocketById(id: string, socket: string) {
+    return await this.poleModel
+      .findOneAndUpdate({ socket: id }, { socket }, { new: true })
       .exec()
       .catch(() => {
         this.logger.error(`[Back] Error en la base de datos`);

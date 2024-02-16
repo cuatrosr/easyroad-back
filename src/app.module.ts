@@ -1,12 +1,9 @@
 import { GatewayModule } from './websockets/websocket.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ProjectsModule } from './projects/projects.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import configuration from './config/enviroment.config';
 import { HealthModule } from './health/health.module';
 import { LoggerModule } from './logger/logger.module';
-import { StatesModule } from './states/states.module';
-import { PolesModule } from './poles/poles.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
 import { join } from 'path';
@@ -32,9 +29,6 @@ import { join } from 'path';
     HealthModule,
     LoggerModule,
     GatewayModule,
-    ProjectsModule,
-    StatesModule,
-    PolesModule,
   ],
 })
 export class AppModule {}

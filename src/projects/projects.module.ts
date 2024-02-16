@@ -47,5 +47,6 @@ import { extname } from 'path';
       useClass: MongoProjectsRepository,
     },
   ],
+  exports: [ProjectsService],
 })
 export class ProjectsModule {}

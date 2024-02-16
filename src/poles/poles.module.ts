@@ -1,5 +1,6 @@
 import { MongoPolesRepository } from './repositories/mongo-poles-repository';
 import { POLES_REPOSITORY } from './repositories/poles-repository';
+import { ProjectsModule } from '../projects/projects.module';
 import { Pole, PoleSchema } from './schemas/pole.schema';
 import { PolesController } from './poles.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -14,6 +15,7 @@ import { Module } from '@nestjs/common';
         schema: PoleSchema,
       },
     ]),
+    ProjectsModule,
   ],
   controllers: [PolesController],
   providers: [
@@ -23,5 +25,6 @@ import { Module } from '@nestjs/common';
       useClass: MongoPolesRepository,
     },
   ],
+  exports: [PolesService],
 })
 export class PolesModule {}
