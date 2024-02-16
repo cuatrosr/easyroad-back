@@ -18,6 +18,7 @@ services:
       context: .
       args:
         - PORT=${PORT}
+        - WS_PORT=${WEBSOCKET_PORT}
     depends_on:
       - mongo
     links:
@@ -26,6 +27,7 @@ services:
       - .env
     ports:
       - "${PORT}:${PORT}"
+      - "${WEBSOCKET_PORT}:${WEBSOCKET_PORT}"
     deploy:
       resources:
         limits:
