@@ -1,6 +1,7 @@
-import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import mongoose, { Types, Document, Model } from 'mongoose';
 import { Transform } from 'class-transformer';
+import mongoose, { Types, Document, Model } from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { TipoEvento } from '../../utils/enums/tipo-evento.enum';
 
 export class HeartbeatJSON {
   @Prop({ required: true })
@@ -51,7 +52,7 @@ export class Heartbeat {
   contenido: HeartbeatJSON;
 
   @Prop({ required: true })
-  tipo: string;
+  tipo: TipoEvento;
 }
 
 export const HeartbeatSchema = SchemaFactory.createForClass(Heartbeat);

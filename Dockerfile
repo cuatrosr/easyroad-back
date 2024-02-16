@@ -4,6 +4,10 @@ ENV DIR /project
 WORKDIR $DIR
 ARG NPM_TOKEN
 
+RUN mkdir -p /project/public && \
+  chown -R node:node /project/public && \
+  chmod -R 755 /project/public
+
 FROM base AS build
 
 RUN apk update && apk add --no-cache dumb-init=1.2.5-r2

@@ -1,3 +1,4 @@
+import { TipoEvento } from '../../utils/enums/tipo-evento.enum';
 import {
   IsUUID,
   IsNumber,
@@ -62,5 +63,5 @@ export class HeartbeatDTO {
 
   @IsString()
   @IsNotEmpty()
-  tipo: string;
+  tipo: TipoEvento;
 }
