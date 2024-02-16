@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './utils/filters/httpException.filter';
+import { SocketAdapter } from './websockets/socket.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -23,6 +24,7 @@ async function bootstrap() {
     }),
   );
   app.useGlobalFilters(new HttpExceptionFilter(app.get(Logger)));
+  app.useWebSocketAdapter(new SocketAdapter(app, configService));
 
   const config = new DocumentBuilder()
     .setTitle('Easy Road Back')
@@ -33,10 +35,11 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   const port = configService.get<string>('PORT', '3000');
-
   await app.listen(port);
 
   const logger = app.get(Logger);
+  const wsPort = configService.get<number>('WEBSOCKET_PORT', 3001);
   logger.log(`[Back] App is ready and listening on port ${port} 🚀`);
+  logger.log(`[WS] WebSocket is ready and listening on port ${wsPort} 🚀`);
 }
 bootstrap();

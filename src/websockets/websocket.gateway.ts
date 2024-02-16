@@ -17,8 +17,8 @@ import {
 } from '@nestjs/common';
 import {
   WebSocketServer,
-  WebSocketGateway,
   SubscribeMessage,
+  WebSocketGateway,
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
@@ -31,7 +31,7 @@ import {
   }),
 )
 @UseFilters(WsExceptionFilter)
-@WebSocketGateway(81, { cors: { origin: '*' } })
+@WebSocketGateway()
 export class WebsocketGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
