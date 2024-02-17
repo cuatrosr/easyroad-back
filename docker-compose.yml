@@ -1,5 +1,7 @@
 version: '3.8'
 
+name: easyroad
+
 services:
   mongo:
     container_name: mongo
@@ -8,11 +10,13 @@ services:
       - MONGO_DATA_DIR=/data/db
     ports:
       - '27017:27017'
+    networks:
+      - networkEasyroad
     volumes:
       - mongo:/data/db
   
-  my-service-production:
-    container_name: my-service-production
+  nestjs:
+    container_name: nestjs
     build:
       target: production
       context: .
@@ -28,6 +32,8 @@ services:
     ports:
       - "${PORT}:${PORT}"
       - "${WEBSOCKET_PORT}:${WEBSOCKET_PORT}"
+    networks:
+      - networkEasyroad
     deploy:
       resources:
         limits:
@@ -36,6 +42,10 @@ services:
         reservations:
           cpus: "0.25"
           memory: "256m"
+
+networks:
+  networkEasyroad:
+    name: networkEasyroad
 
 volumes:
   mongo:
