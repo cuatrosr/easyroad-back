@@ -72,6 +72,7 @@ export class WebsocketGateway
   async handleEvent(client: Socket, payload: EventoDTO) {
     this.logger.log(`[WS] Evento received from: ${client.id}`);
     await this.checkIfSerialExists(payload.serial_dispositivo);
+    await this.polesService.updateSocket(payload.serial_dispositivo, client.id);
     await this.eventService.createEvent(payload);
     const status =
       payload.tipo_evento === 'apertura_puerta' ? Status.ALERT : Status.OK;
