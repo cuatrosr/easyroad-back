@@ -22,6 +22,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
+import { TipoEvento } from 'src/utils/enums/tipo-evento.enum';
 
 @UsePipes(
   new ValidationPipe({
@@ -75,7 +76,9 @@ export class WebsocketGateway
     await this.polesService.updateSocket(payload.serial_dispositivo, client.id);
     await this.eventService.createEvent(payload);
     const status =
-      payload.tipo_evento === 'apertura_puerta' ? Status.ALERT : Status.OK;
+      payload.tipo_evento === TipoEvento.APERTURA_PUERTA
+        ? Status.ALERT
+        : Status.OK;
     await this.polesService.updateStateHeartbeat(client.id, status);
   }
 
