@@ -68,6 +68,21 @@ export class ProjectsController {
 
   @HttpCode(200)
   @ApiOkResponse({
+    description: 'El proyecto fue encontrado exitosamente',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Error en la base de datos',
+  })
+  @Get(':id')
+  async findById(@Param('id') id: string) {
+    this.logger.log('[Back] Project endpoint called!');
+    const project = await this.projectsService.findById(id);
+    this.logger.log(`[Back] Retornando el proyecto ${project?._id || null}`);
+    return project;
+  }
+
+  @HttpCode(200)
+  @ApiOkResponse({
     description: 'Todos los proyectos fueron encontrados exitosamente',
   })
   @ApiInternalServerErrorResponse({
