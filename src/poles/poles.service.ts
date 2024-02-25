@@ -25,6 +25,10 @@ export class PolesService {
     return await this.polesRepository.findById(id);
   }
 
+  async findByProject(project: string) {
+    return await this.polesRepository.findByProject(project);
+  }
+
   async findBySerial(serial: string) {
     return await this.polesRepository.findBySerial(serial);
   }

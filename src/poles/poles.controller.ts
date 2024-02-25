@@ -72,6 +72,24 @@ export class PolesController {
 
   @HttpCode(200)
   @ApiOkResponse({
+    description:
+      'Los postes del proyecto especifico fueron encontrados exitosamente',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Error en la base de datos',
+  })
+  @Get('project/:project')
+  async findByProject(@Param('project') project: string) {
+    this.logger.log('[Back] Pole endpoint called!');
+    const poles = await this.polesService.findByProject(project);
+    this.logger.log(
+      `[Back] Retornando todos lo postes del proyecto ${project}`,
+    );
+    return poles;
+  }
+
+  @HttpCode(200)
+  @ApiOkResponse({
     description: 'El poste fue actualizado exitosamente',
   })
   @ApiInternalServerErrorResponse({

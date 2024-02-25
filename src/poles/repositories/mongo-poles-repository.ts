@@ -39,6 +39,16 @@ export class MongoPolesRepository implements PolesRepository {
       });
   }
 
+  async findByProject(project: string) {
+    return await this.poleModel
+      .find({ project, isActive: true })
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
+
   async findBySerial(serial: string) {
     return await this.poleModel
       .findOne({ serial, isActive: true })
