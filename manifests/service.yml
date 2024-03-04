@@ -5,6 +5,13 @@ metadata:
 spec:
     type: LoadBalancer
     ports:
-    - port: 80 
+        - name: http
+          protocol: TCP
+          port: 3500
+          targetPort: 3500
+        - name: ws
+          protocol: ws
+          port: 3600
+          targetPort: 3600
     selector:
         app: easyroadback

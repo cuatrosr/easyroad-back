@@ -16,4 +16,7 @@ spec:
         - name: easyroadback 
           image: crtwitterauto.azurecr.io/easyroadback
           ports:
-          - containerPort: 80
+          - containerPort: 3000
+          - containerPort: 3500
+          env_file:
+            - .env
