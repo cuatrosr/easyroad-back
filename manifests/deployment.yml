@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: easyroadback 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: easyroadback
+  template:
+    metadata:
+      labels:
+        app: easyroadback 
+    spec:
+      containers:
+        - name: easyroadback 
+          image: crtwitterauto.azurecr.io/easyroadback
+          ports:
+          - containerPort: 80
