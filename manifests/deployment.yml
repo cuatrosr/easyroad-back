@@ -7,10 +7,12 @@ spec:
   selector:
     matchLabels:
       app: ftsback
+      lbtype: external
   template:
     metadata:
       labels:
         app: ftsback 
+        lbtype: external
     spec:
       containers:
         - name: ftsback

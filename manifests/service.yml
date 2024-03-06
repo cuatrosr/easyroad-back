@@ -15,3 +15,4 @@ spec:
           targetPort: 3600
     selector:
         app: ftsback
+        lbtype: external
