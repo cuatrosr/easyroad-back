@@ -35,5 +35,5 @@ COPY --from=build $DIR/node_modules $DIR/node_modules
 COPY --from=build $DIR/dist $DIR/dist
 
 USER $USER
-EXPOSE $PORT
+EXPOSE $PORT $WEBSOCKET_PORT
 CMD ["dumb-init", "node", "dist/main.js"]
