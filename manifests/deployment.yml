@@ -16,7 +16,16 @@ spec:
         - name: ftsback
           image: crtwitterauto.azurecr.io/ftsback
           ports:
-          - containerPort: 3000
           - containerPort: 3500
-          env_file:
-            - .env
+          - containerPort: 3600
+          env:
+          - name: LOGGER_LEVEL
+            value: "log"
+          - name: PORT
+            value: "3500"
+          - name: DATABASE_HOST
+            value: "mongodb://tfex-cosmos-db-49140:jvxn3Rj2kbt9dTcuJbfinKPfrrRV9EwEhveC1CugVUhbEGeDRoD0htI43QqpSXWW36RUH59ujR0nACDbZXKoHw==@tfex-cosmos-db-49140.mongo.cosmos.azure.com:10255/easyroad?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@tfex-cosmos-db-49140@"
+          - name: WEBSOCKET_PORT
+            value: "3600"
+          - name: WEBSOCKET_CORS_ORIGIN
+            value: "*"
