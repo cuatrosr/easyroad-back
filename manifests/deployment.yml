@@ -13,7 +13,10 @@ spec:
         app: ftsback 
     spec:
       containers:
-        - name: ftsback 
+        - name: ftsback
           image: crtwitterauto.azurecr.io/ftsback
           ports:
+          - containerPort: 3000
           - containerPort: 3500
+          env_file:
+            - .env
