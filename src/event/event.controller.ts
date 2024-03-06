@@ -1,14 +1,5 @@
-import MongooseClassSerializerInterceptor from '../utils/interceptors/mongooseClassSerializer.interceptor';
-import { Event } from './schemas/event.schema';
 import { EventService } from './event.service';
-import {
-  UseInterceptors,
-  Controller,
-  HttpCode,
-  Logger,
-  Inject,
-  Get,
-} from '@nestjs/common';
+import { Controller, HttpCode, Logger, Inject, Get } from '@nestjs/common';
 import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
@@ -17,7 +8,6 @@ import {
 
 @ApiTags('Events')
 @Controller('events')
-@UseInterceptors(MongooseClassSerializerInterceptor(Event))
 export class EventController {
   constructor(
     private readonly eventService: EventService,

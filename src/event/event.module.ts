@@ -1,8 +1,9 @@
 import { MongoEventRepository } from './repositories/mongo-event-repository';
 import { EVENT_REPOSITORY } from './repositories/event-repository';
 import { Event, EventSchema } from './schemas/event.schema';
-import { EventService } from './event.service';
+import { EventController } from './event.controller';
 import { MongooseModule } from '@nestjs/mongoose';
+import { EventService } from './event.service';
 import { Module } from '@nestjs/common';
 
 @Module({
@@ -14,6 +15,7 @@ import { Module } from '@nestjs/common';
       },
     ]),
   ],
+  controllers: [EventController],
   providers: [
     EventService,
     {
