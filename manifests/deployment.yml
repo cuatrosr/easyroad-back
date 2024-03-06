@@ -3,11 +3,10 @@ kind: Deployment
 metadata:
   name: ftsback 
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: ftsback
-      lbtype: external
   template:
     metadata:
       labels:
