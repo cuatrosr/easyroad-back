@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: ftsback 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ftsback
+  template:
+    metadata:
+      labels:
+        app: ftsback 
+    spec:
+      containers:
+        - name: ftsback 
+          image: crtwitterauto.azurecr.io/ftsback
+          ports:
+          - containerPort: 3500
