@@ -25,7 +25,7 @@ spec:
           - name: PORT
             value: "3500"
           - name: DATABASE_HOST
-            value: "mongodb://tfex-cosmos-db-49140:jvxn3Rj2kbt9dTcuJbfinKPfrrRV9EwEhveC1CugVUhbEGeDRoD0htI43QqpSXWW36RUH59ujR0nACDbZXKoHw==@tfex-cosmos-db-49140.mongo.cosmos.azure.com:10255/easyroad?ssl=true&retrywrites=false&maxIdleTimeMS=120000&appName=@tfex-cosmos-db-49140@"
+            value: "mongodb://tfex-cosmos-db-94326:SciL2MZtKGOxDN602lSIC1VRGbXVZMZfOu6SWoZy5FH9OTI1ruSGmTWjMIGigKpL6wo8Q0NKlTgUACDbYDJLeQ==@tfex-cosmos-db-94326.mongo.cosmos.azure.com:10255/easyroad?ssl=true&retrywrites=false&replicaSet=globaldb&maxIdleTimeMS=120000&appName=@tfex-cosmos-db-94326@"
           - name: WEBSOCKET_PORT
             value: "3600"
           - name: WEBSOCKET_CORS_ORIGIN
