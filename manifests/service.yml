@@ -10,7 +10,7 @@ spec:
           port: 3500
           targetPort: 3500
         - name: ws
-          protocol: ws
+          protocol: TCP
           port: 3600
           targetPort: 3600
     selector:
