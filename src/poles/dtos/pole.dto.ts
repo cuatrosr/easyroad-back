@@ -6,6 +6,14 @@ export class CreatePoleDTO {
   @IsNotEmpty()
   serial: string;
 
+  @IsString()
+  @IsNotEmpty()
+  fabricante: string;
+
+  @IsString()
+  @IsNotEmpty()
+  modelo: string;
+
   @IsMongoId()
   @IsNotEmpty()
   project: string;

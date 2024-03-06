@@ -14,6 +14,12 @@ export class Pole {
   @Prop({ required: true, unique: true })
   serial: string;
 
+  @Prop({ required: true })
+  fabricante: string;
+
+  @Prop({ required: true })
+  modelo: string;
+
   @Prop()
   socket: string;
 
