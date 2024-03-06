@@ -30,3 +30,9 @@ spec:
             value: "3600"
           - name: WEBSOCKET_CORS_ORIGIN
             value: "*"
+          - name: AZURE_SAS_KEY
+            value: sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-03-13T15:51:18Z&st=2024-03-06T07:51:18Z&spr=https,http&sig=Zq73YcShVXUyAlbXyhtFfDIPwVZToVRa20t7akm6IH8%3D
+          - name: AZURE_ACCOUNT_NAME
+            value: mysastorage
+          - name: AZURE_CONTAINER_NAME
+            value: mysccontent

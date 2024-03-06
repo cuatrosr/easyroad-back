@@ -1,6 +1,10 @@
 import { CreateProjectDTO, UpdateProjectDTO } from './dtos/project.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import {
+  UploadedFileMetadata,
+  AzureStorageService,
+} from '@nestjs/azure-storage';
+import {
   PROJECTS_REPOSITORY,
   ProjectsRepository,
 } from './repositories/projects-repository';
@@ -8,9 +12,14 @@ import {
 @Injectable()
 export class ProjectsService {
   constructor(
+    private readonly azureStorage: AzureStorageService,
     @Inject(PROJECTS_REPOSITORY)
     private readonly projectsRepository: ProjectsRepository,
   ) {}
+
+  async uploadImage(image: UploadedFileMetadata) {
+    return await this.azureStorage.upload(image);
+  }
 
   async createProject(createProjectDTO: CreateProjectDTO, image: string) {
     return await this.projectsRepository.createProject(createProjectDTO, image);

@@ -9,4 +9,9 @@ export default () => ({
       origin: process.env.WEBSOCKET_CORS_ORIGIN || '*',
     },
   },
+  azure: {
+    sasKey: process.env.AZURE_SAS_KEY || 'sas_key',
+    accountName: process.env.AZURE_ACCOUNT_NAME || 'account_name',
+    containerName: process.env.AZURE_CONTAINER_NAME || 'container_name',
+  },
 });

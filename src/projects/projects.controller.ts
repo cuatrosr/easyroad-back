@@ -1,9 +1,9 @@
 import MongooseClassSerializerInterceptor from '../utils/interceptors/mongooseClassSerializer.interceptor';
 import { CreateProjectDTO, UpdateProjectDTO } from './dtos/project.dto';
+import { UploadedFileMetadata } from '@nestjs/azure-storage';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProjectsService } from './projects.service';
 import { Project } from './schemas/project.schema';
-import { unlinkSync } from 'fs';
 import {
   UseInterceptors,
   Controller,
@@ -53,14 +53,15 @@ export class ProjectsController {
   })
   @UseInterceptors(FileInterceptor('image'))
   async createProject(
-    @UploadedFile() image: Express.Multer.File,
+    @UploadedFile() image: UploadedFileMetadata,
     @Body() createProjectDTO: CreateProjectDTO,
   ) {
     this.logger.log('[Back] Project endpoint called!');
-    await this.checkIfProjectNameExists(createProjectDTO.name, image);
+    await this.checkIfProjectNameExists(createProjectDTO.name);
+    const imageUrl = await this.projectsService.uploadImage(image);
     const project = await this.projectsService.createProject(
       createProjectDTO,
-      image.filename,
+      imageUrl!,
     );
     this.logger.log(`[Back] Proyecto creado: ${project.name}`);
     return project;
@@ -140,16 +141,12 @@ export class ProjectsController {
     return project;
   }
 
-  private async checkIfProjectNameExists(
-    name: string,
-    image: Express.Multer.File,
-  ) {
+  private async checkIfProjectNameExists(name: string) {
     this.logger.log(
       `[Back] Validando si el nombre del proyecto ya existe: ${name}`,
     );
     if (await this.projectsService.findByName(name)) {
       this.logger.warn(`[Back] El nombre del proyecto ya existe: ${name}`);
-      unlinkSync(image.path);
       HttpBadRequest('El nombre del proyecto ya existe');
     }
   }
