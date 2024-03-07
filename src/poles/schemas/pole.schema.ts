@@ -33,6 +33,16 @@ export class Pole {
 
   @Prop({ type: String, enum: Status, default: Status.DISCONNECTED })
   state: Status;
+
+  @Prop({
+    default: () => new Date(Date.now() - 5 * 60 * 60 * 1000), // GMT-5 timezone
+  })
+  created: Date;
+
+  @Prop({
+    default: () => new Date(Date.now() - 5 * 60 * 60 * 1000), // GMT-5 timezone
+  })
+  updated: Date;
 }
 
 export const PoleSchema = SchemaFactory.createForClass(Pole);

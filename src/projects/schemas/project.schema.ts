@@ -21,6 +21,16 @@ export class Project {
   @Prop({ default: true })
   @Exclude()
   isActive: boolean;
+
+  @Prop({
+    default: () => new Date(Date.now() - 5 * 60 * 60 * 1000), // GMT-5 timezone
+  })
+  created: Date;
+
+  @Prop({
+    default: () => new Date(Date.now() - 5 * 60 * 60 * 1000), // GMT-5 timezone
+  })
+  updated: Date;
 }
 
 export const ProjectSchema = SchemaFactory.createForClass(Project);
