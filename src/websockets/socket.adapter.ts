@@ -10,14 +10,14 @@ export class SocketAdapter extends IoAdapter {
   ) {
     super(app);
   }
-  createIOServer(port: number, options?: ServerOptions) {
+  createIOServer(port: number, options: ServerOptions) {
     port = this.configService.get<number>('WEBSOCKET_PORT', 3001);
-    const origins = this.configService.get<string>(
+    let origin: string | boolean = this.configService.get<string>(
       'WEBSOCKET_CORS_ORIGIN',
-      '*',
+      'true',
     );
-    const origin = origins.split(',');
-    options!.cors = { origin };
+    origin = origin === 'true' ? true : origin;
+    options.cors = { origin, methods: ['GET', 'POST'], credentials: true };
     const server = super.createIOServer(port, options);
     return server;
   }
