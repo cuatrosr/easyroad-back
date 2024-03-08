@@ -62,6 +62,14 @@ export class WebsocketGateway
     );
     await this.heartbeatService.createHeartbeat(payload);
     await this.polesService.updateStateHeartbeat(client.id, Status.OK);
+    this.server.emit(payload.contenido.serial_dispositivo, payload);
+  }
+
+  @SubscribeMessage('serial')
+  async relateSerial(client: Socket, serial: string) {
+    this.logger.log(`[WS] Serial received from: ${client.id}`);
+    await this.checkIfSerialExists(serial);
+    client.join(serial);
   }
 
   private async checkIfSerialExists(serial: string) {
