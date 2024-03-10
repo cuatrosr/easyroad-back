@@ -23,7 +23,7 @@ export class HeartbeatController {
 
   @HttpCode(200)
   @ApiOkResponse({
-    description: 'Todos los eventos fueron encontrados exitosamente',
+    description: 'El heartbeat fue encontrado exitosamente',
   })
   @ApiInternalServerErrorResponse({
     description: 'Error en la base de datos',
