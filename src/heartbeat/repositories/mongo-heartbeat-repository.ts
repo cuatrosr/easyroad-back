@@ -31,7 +31,7 @@ export class MongoHeartbeatRepository implements HeartbeatRepository {
 
   async findBySerial(serial: string) {
     return await this.heartbeatModel
-      .findOne({ serial_dispositivo: serial })
+      .findOne({ 'contenido.serial_dispositivo': serial })
       .sort({ createdAt: -1 })
       .limit(1)
       .exec()
