@@ -84,7 +84,8 @@ export class WebsocketGateway
     await this.polesService.updateSocket(payload.serial_dispositivo, client.id);
     await this.eventService.createEvent(payload);
     const status =
-      payload.tipo_evento === TipoEvento.APERTURA_PUERTA
+      payload.tipo_evento ===
+      (TipoEvento.APERTURA_PUERTA || TipoEvento.BATERIA_BAJA)
         ? Status.ALERT
         : Status.OK;
     await this.polesService.updateStateHeartbeat(client.id, status);
