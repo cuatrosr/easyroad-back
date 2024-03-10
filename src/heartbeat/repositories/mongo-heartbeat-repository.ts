@@ -30,14 +30,16 @@ export class MongoHeartbeatRepository implements HeartbeatRepository {
   }
 
   async findBySerial(serial: string) {
-    return await this.heartbeatModel
-      .findOne({ 'contenido.serial_dispositivo': serial })
-      .sort({ createdAt: -1 })
-      .limit(1)
+    const documents = await this.heartbeatModel
+      .find({ 'contenido.serial_dispositivo': serial })
       .exec()
-      .catch((e) => {
+      .catch(() => {
         this.logger.error(`[Back] Error en la base de datos`);
-        return HttpMongoError(e.message);
+        return HttpMongoError('Error en la base de datos');
       });
+    const sortedDocuments = documents.sort(
+      (a: any, b: any) => b.created - a.created,
+    );
+    return sortedDocuments.length > 0 ? sortedDocuments[0] : null;
   }
 }
