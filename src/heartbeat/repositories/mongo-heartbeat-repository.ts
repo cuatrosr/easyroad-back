@@ -28,4 +28,16 @@ export class MongoHeartbeatRepository implements HeartbeatRepository {
         return HttpMongoError('Error en la base de datos');
       });
   }
+
+  async findBySerial(serial: string) {
+    return await this.heartbeatModel
+      .findOne({ serial })
+      .sort({ createdAt: -1 })
+      .limit(1)
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
 }

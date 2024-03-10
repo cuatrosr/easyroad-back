@@ -90,6 +90,21 @@ export class PolesController {
 
   @HttpCode(200)
   @ApiOkResponse({
+    description: 'El poste del serial especifico fue encontrado exitosamente',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Error en la base de datos',
+  })
+  @Get('serial/:serial')
+  async findBySerial(@Param('serial') serial: string) {
+    this.logger.log('[Back] Pole endpoint called!');
+    const pole = await this.polesService.findBySerial(serial);
+    this.logger.log(`[Back] Retornando el poste del serial ${serial}`);
+    return pole;
+  }
+
+  @HttpCode(200)
+  @ApiOkResponse({
     description: 'El poste fue actualizado exitosamente',
   })
   @ApiInternalServerErrorResponse({

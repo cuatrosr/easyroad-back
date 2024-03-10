@@ -19,4 +19,8 @@ export class HeartbeatService {
   async findAll() {
     return await this.heartbeatRepository.findAll();
   }
+
+  async findBySerial(serial: string) {
+    return await this.heartbeatRepository.findBySerial(serial);
+  }
 }
