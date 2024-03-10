@@ -1,11 +1,12 @@
-import { HeartbeatModule } from '../heartbeat/heartbeat.module';
-import { WebsocketGateway } from './websocket.gateway';
+import { Module } from '@nestjs/common';
 import { PolesModule } from '../poles/poles.module';
 import { EventModule } from '../event/event.module';
-import { Module } from '@nestjs/common';
+import { WebsocketGateway } from './websocket.gateway';
+import { HeartbeatModule } from '../heartbeat/heartbeat.module';
+import { SolicitudModule } from '../solicitud/solicitud.module';
 
 @Module({
-  imports: [HeartbeatModule, EventModule, PolesModule],
+  imports: [HeartbeatModule, EventModule, SolicitudModule, PolesModule],
   providers: [WebsocketGateway],
 })
 export class GatewayModule {}

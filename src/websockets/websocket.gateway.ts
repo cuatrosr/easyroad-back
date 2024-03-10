@@ -5,6 +5,8 @@ import { HeartbeatDTO } from './dtos/heartbeat.dto';
 import { Status } from '../utils/enums/status.enum';
 import { PolesService } from '../poles/poles.service';
 import { EventService } from '../event/event.service';
+import { TipoEvento } from '../utils/enums/tipo-evento.enum';
+import { SolicitudService } from '../solicitud/solicitud.service';
 import { HeartbeatService } from '../heartbeat/heartbeat.service';
 import { HttpBadRequest } from '../utils/exceptions/http.exception';
 import { WsExceptionFilter } from '../utils/filters/wsException.filter';
@@ -22,7 +24,6 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
-import { TipoEvento } from 'src/utils/enums/tipo-evento.enum';
 
 @UsePipes(
   new ValidationPipe({
@@ -40,6 +41,7 @@ export class WebsocketGateway
     @Inject(Logger) private readonly logger: Logger,
     private readonly heartbeatService: HeartbeatService,
     private readonly eventService: EventService,
+    private readonly solicitudService: SolicitudService,
     private readonly polesService: PolesService,
   ) {}
 
@@ -91,6 +93,7 @@ export class WebsocketGateway
     await this.polesService.updateStateHeartbeat(client.id, status);
   }
 
+  @SubscribeMessage('solicitud')
   async handleSolicitud(payload: SolicitudDTO) {
     this.logger.log('[WS] Solicitud received from server');
     await this.checkIfSerialExists(payload.serial_dispositivo);
