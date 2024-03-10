@@ -1,6 +1,7 @@
 import { MongoHeartbeatRepository } from './repositories/mongo-heartbeat-repository';
 import { HEARTBEAT_REPOSITORY } from './repositories/heartbeat-repository';
 import { Heartbeat, HeartbeatSchema } from './schemas/heartbeat.schema';
+import { HeartbeatController } from './heartbeat.controller';
 import { HeartbeatService } from './heartbeat.service';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
@@ -14,6 +15,7 @@ import { Module } from '@nestjs/common';
       },
     ]),
   ],
+  controllers: [HeartbeatController],
   providers: [
     HeartbeatService,
     {
