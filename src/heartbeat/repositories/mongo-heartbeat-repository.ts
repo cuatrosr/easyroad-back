@@ -35,9 +35,9 @@ export class MongoHeartbeatRepository implements HeartbeatRepository {
       .sort({ createdAt: -1 })
       .limit(1)
       .exec()
-      .catch(() => {
+      .catch((e) => {
         this.logger.error(`[Back] Error en la base de datos`);
-        return HttpMongoError('Error en la base de datos');
+        return HttpMongoError(e.message);
       });
   }
 }
