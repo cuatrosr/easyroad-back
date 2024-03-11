@@ -94,14 +94,14 @@ export class WebsocketGateway
   }
 
   @SubscribeMessage('solicitud')
-  async handleSolicitud(payload: SolicitudDTO) {
+  async handleSolicitud(_client: Socket, payload: SolicitudDTO) {
     this.logger.log('[WS] Solicitud received from server');
     await this.checkIfSerialExists(payload.serial_dispositivo);
     const pole = await this.polesService.findBySerial(
       payload.serial_dispositivo,
     );
     this.wsClients
-      .filter((c) => c.id == pole!.socket)
+      .filter((c) => c.id === pole!.socket)
       .forEach((c) => {
         c.emit('solicitud', payload);
       });
