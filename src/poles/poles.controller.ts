@@ -16,6 +16,7 @@ import {
   Post,
   Body,
   Get,
+  Query,
 } from '@nestjs/common';
 import {
   ApiInternalServerErrorResponse,
@@ -128,10 +129,11 @@ export class PolesController {
   @ApiInternalServerErrorResponse({
     description: 'Error en la base de datos',
   })
-  @Delete()
-  async deletePoles(@Body('ids') ids: string[]) {
+  @Delete('delete')
+  async deletePoles(@Query('ids') ids: string) {
     this.logger.log('[Back] Pole endpoint called!');
-    const poles = await this.polesService.deletePoles(ids);
+    const poleIds = ids.split(',');
+    const poles = await this.polesService.deletePoles(poleIds);
     this.logger.log(`[Back] Postes eliminados: ${ids}`);
     return poles;
   }
