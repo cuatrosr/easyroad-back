@@ -60,6 +60,10 @@ export class PolesService {
     return await this.polesRepository.updateSocketById(id, socket);
   }
 
+  async deletePoles(ids: string[]) {
+    return await this.polesRepository.deletePoles(ids);
+  }
+
   async deletePole(id: string) {
     return await this.polesRepository.deletePole(id);
   }

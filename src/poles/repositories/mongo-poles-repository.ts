@@ -111,6 +111,16 @@ export class MongoPolesRepository implements PolesRepository {
       });
   }
 
+  async deletePoles(ids: string[]) {
+    return await this.poleModel
+      .updateMany({ _id: { $in: ids } }, { isActive: false })
+      .exec()
+      .catch(() => {
+        this.logger.error(`[Back] Error en la base de datos`);
+        return HttpMongoError('Error en la base de datos');
+      });
+  }
+
   async deletePole(id: string) {
     return await this.poleModel
       .findByIdAndUpdate(id, { isActive: false }, { new: true })

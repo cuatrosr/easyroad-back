@@ -1,3 +1,4 @@
+import { UpdateWriteOpResult } from 'mongoose';
 import { CreatePoleDTO, UpdatePoleDTO } from '../dtos/pole.dto';
 import { Pole } from '../schemas/pole.schema';
 
@@ -14,5 +15,6 @@ export interface PolesRepository {
   updateSocket(serial: string, socket: string): Promise<Pole | null>;
   updateSocketById(id: string, socket: string): Promise<Pole | null>;
   updateStateHeartbeat(socket: string, state: string): Promise<Pole | null>;
+  deletePoles(ids: string[]): Promise<UpdateWriteOpResult>;
   deletePole(id: string): Promise<Pole | null>;
 }

@@ -123,6 +123,21 @@ export class PolesController {
 
   @HttpCode(200)
   @ApiOkResponse({
+    description: 'Los postes fueron eliminados exitosamente',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Error en la base de datos',
+  })
+  @Delete()
+  async deletePoles(@Body('ids') ids: string[]) {
+    this.logger.log('[Back] Pole endpoint called!');
+    const poles = await this.polesService.deletePoles(ids);
+    this.logger.log(`[Back] Postes eliminados: ${ids}`);
+    return poles;
+  }
+
+  @HttpCode(200)
+  @ApiOkResponse({
     description: 'El poste fue eliminado exitosamente',
   })
   @ApiInternalServerErrorResponse({
