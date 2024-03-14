@@ -6,7 +6,8 @@ ARG NPM_TOKEN
 
 FROM base AS build
 
-RUN apk update && apk add --no-cache dumb-init=1.2.5-r2
+RUN apk update && apk add --no-cache dumb-init=1.2.5-r2 && apk add --no-cache git
+RUN git clone -b main --single-branch https://github.com/cuatrosr/easyroad-back
 
 COPY package.json pnpm-lock.yaml $DIR
 RUN npm install -g pnpm
