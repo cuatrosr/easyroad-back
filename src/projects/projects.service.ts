@@ -1,28 +1,34 @@
 import { CreateProjectDTO, UpdateProjectDTO } from './dtos/project.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import {
-  UploadedFileMetadata,
-  AzureStorageService,
-} from '@nestjs/azure-storage';
-import {
   PROJECTS_REPOSITORY,
   ProjectsRepository,
 } from './repositories/projects-repository';
+import { GridFSBucket } from 'mongodb';
+import { InjectConnection } from '@nestjs/mongoose';
+import { Connection, Types } from 'mongoose';
 
 @Injectable()
 export class ProjectsService {
+  private gfs: GridFSBucket;
+
   constructor(
-    private readonly azureStorage: AzureStorageService,
     @Inject(PROJECTS_REPOSITORY)
     private readonly projectsRepository: ProjectsRepository,
-  ) {}
-
-  async uploadImage(image: UploadedFileMetadata) {
-    return await this.azureStorage.upload(image);
+    @InjectConnection() private connection: Connection,
+  ) {
+    this.gfs = new GridFSBucket(this.connection.db as any, {
+      bucketName: 'fs',
+    });
   }
 
   async createProject(createProjectDTO: CreateProjectDTO, image: string) {
     return await this.projectsRepository.createProject(createProjectDTO, image);
+  }
+
+  async getImage(imageId: string) {
+    const _id = new Types.ObjectId(imageId);
+    return this.gfs.openDownloadStream(_id);
   }
 
   async findAll() {

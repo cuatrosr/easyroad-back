@@ -1,6 +1,5 @@
 import MongooseClassSerializerInterceptor from '../utils/interceptors/mongooseClassSerializer.interceptor';
 import { CreateProjectDTO, UpdateProjectDTO } from './dtos/project.dto';
-import { UploadedFileMetadata } from '@nestjs/azure-storage';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ProjectsService } from './projects.service';
 import { Project } from './schemas/project.schema';
@@ -17,6 +16,7 @@ import {
   Body,
   Get,
   UploadedFile,
+  Res,
 } from '@nestjs/common';
 import {
   ApiInternalServerErrorResponse,
@@ -30,6 +30,7 @@ import {
   HttpBadRequest,
   HttpNotFound,
 } from '../utils/exceptions/http.exception';
+import { Response } from 'express';
 
 @ApiTags('Projects')
 @Controller('projects')
@@ -53,18 +54,28 @@ export class ProjectsController {
   })
   @UseInterceptors(FileInterceptor('image'))
   async createProject(
-    @UploadedFile() image: UploadedFileMetadata,
+    @UploadedFile() image: Express.Multer.File,
     @Body() createProjectDTO: CreateProjectDTO,
   ) {
     this.logger.log('[Back] Project endpoint called!');
     await this.checkIfProjectNameExists(createProjectDTO.name);
-    const imageUrl = await this.projectsService.uploadImage(image);
+    const imageUrl = image.id.toString();
     const project = await this.projectsService.createProject(
       createProjectDTO,
       imageUrl!,
     );
     this.logger.log(`[Back] Proyecto creado: ${project.name}`);
     return project;
+  }
+
+  @Get('image/:id')
+  async getImage(@Param('id') id: string, @Res() res: Response) {
+    const imageStream = await this.projectsService.getImage(id);
+    res.set({
+      'Content-Type': 'image/jpeg',
+      'Content-Disposition': `attachment; filename="${id}.jpg"`,
+    });
+    imageStream.pipe(res);
   }
 
   @HttpCode(200)
