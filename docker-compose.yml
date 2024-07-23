@@ -4,7 +4,7 @@ name: easyroad
 
 services:
   mongo:
-    container_name: mongo
+    container_name: mongoeasyroad
     image: 'mongo:4.4'
     environment:
       - MONGO_DATA_DIR=/data/db
@@ -13,7 +13,7 @@ services:
     networks:
       - networkEasyroad
     volumes:
-      - mongo:/data/db
+      - mongoeasyroad:/data/db
   
   nestjs:
     container_name: nestjs
