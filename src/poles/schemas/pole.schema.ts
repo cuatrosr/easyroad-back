@@ -12,6 +12,9 @@ export class Pole {
   _id: Types.ObjectId;
 
   @Prop({ required: true, unique: true })
+  name: string;
+
+  @Prop({ required: true, unique: true })
   serial: string;
 
   @Prop({ required: true })

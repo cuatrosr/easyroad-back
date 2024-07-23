@@ -4,6 +4,10 @@ import { PartialType } from '@nestjs/swagger';
 export class CreatePoleDTO {
   @IsString()
   @IsNotEmpty()
+  name: string;
+
+  @IsString()
+  @IsNotEmpty()
   serial: string;
 
   @IsString()

@@ -5,7 +5,6 @@ import { HeartbeatDTO } from './dtos/heartbeat.dto';
 import { Status } from '../utils/enums/status.enum';
 import { PolesService } from '../poles/poles.service';
 import { EventService } from '../event/event.service';
-import { TipoEvento } from '../utils/enums/tipo-evento.enum';
 import { SolicitudService } from '../solicitud/solicitud.service';
 import { HeartbeatService } from '../heartbeat/heartbeat.service';
 import { HttpBadRequest } from '../utils/exceptions/http.exception';
@@ -24,6 +23,7 @@ import {
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
+import { TipoNotificacion } from 'src/utils/enums/tipo-notificacion.enum';
 
 @UsePipes(
   new ValidationPipe({
@@ -86,11 +86,12 @@ export class WebsocketGateway
     await this.polesService.updateSocket(payload.serial_dispositivo, client.id);
     await this.eventService.createEvent(payload);
     const status =
-      payload.tipo_evento ===
-      (TipoEvento.APERTURA_PUERTA || TipoEvento.BATERIA_BAJA)
+      payload.tipo_notificacion === TipoNotificacion.ALERTA
         ? Status.ALERT
         : Status.OK;
     await this.polesService.updateStateHeartbeat(client.id, status);
+    if (payload.tipo_notificacion === TipoNotificacion.ALERTA)
+      this.server.emit(`${payload.serial_dispositivo}-alert`, payload);
   }
 
   @SubscribeMessage('solicitud')
@@ -100,6 +101,7 @@ export class WebsocketGateway
     const pole = await this.polesService.findBySerial(
       payload.serial_dispositivo,
     );
+    await this.solicitudService.createSolicitud(payload);
     this.wsClients
       .filter((c) => c.id === pole!.socket)
       .forEach((c) => {

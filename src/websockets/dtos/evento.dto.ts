@@ -17,4 +17,8 @@ export class EventoDTO {
   @IsString()
   @IsNotEmpty()
   serial_dispositivo: string;
+
+  @IsString()
+  @IsNotEmpty()
+  tipo_notificacion: string;
 }

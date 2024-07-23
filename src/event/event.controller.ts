@@ -22,10 +22,25 @@ export class EventController {
     description: 'Error en la base de datos',
   })
   @Get()
-  async findAll() {
+  async findAllEvents() {
     this.logger.log('[Back] Event endpoint called!');
-    const events = await this.eventService.findAll();
+    const events = await this.eventService.findAllEvents();
     this.logger.log('[Back] Retornando todos los eventos');
+    return events;
+  }
+
+  @HttpCode(200)
+  @ApiOkResponse({
+    description: 'Todas las alertas fueron encontradas exitosamente',
+  })
+  @ApiInternalServerErrorResponse({
+    description: 'Error en la base de datos',
+  })
+  @Get('alerts')
+  async findAllAlerts() {
+    this.logger.log('[Back] Event endpoint called!');
+    const events = await this.eventService.findAllAlerts();
+    this.logger.log('[Back] Retornando todas las alertas');
     return events;
   }
 }

@@ -5,5 +5,6 @@ export const EVENT_REPOSITORY = 'EventRepository';
 
 export interface EventRepository {
   createEvento(createEventDTO: EventoDTO): Promise<Event>;
-  findAll(): Promise<Event[]>;
+  findAllEvents(): Promise<Event[]>;
+  findAllAlerts(): Promise<Event[]>;
 }

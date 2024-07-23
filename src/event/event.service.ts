@@ -16,7 +16,11 @@ export class EventService {
     return await this.eventRepository.createEvento(createEventDTO);
   }
 
-  async findAll() {
-    return await this.eventRepository.findAll();
+  async findAllEvents() {
+    return await this.eventRepository.findAllEvents();
+  }
+
+  async findAllAlerts() {
+    return await this.eventRepository.findAllAlerts();
   }
 }
