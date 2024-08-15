@@ -91,7 +91,7 @@ export class WebsocketGateway
         : Status.OK;
     await this.polesService.updateStateHeartbeat(client.id, status);
     if (payload.tipo_notificacion === TipoNotificacion.ALERTA)
-      this.server.emit(`${payload.serial_dispositivo}-alert`, payload);
+      this.server.emit(`alert`, payload);
   }
 
   @SubscribeMessage('solicitud')

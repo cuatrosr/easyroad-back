@@ -3,7 +3,7 @@ version: '3.8'
 name: easyroad
 
 services:
-  mongo:
+  mongoeasyroad:
     container_name: mongoeasyroad
     image: 'mongo:4.4'
     environment:
@@ -13,7 +13,7 @@ services:
     networks:
       - networkEasyroad
     volumes:
-      - mongoeasyroad:/data/db
+      - mongo:/data/db
   
   nestjs:
     container_name: nestjs
@@ -24,9 +24,9 @@ services:
         - PORT=${PORT}
         - WS_PORT=${WEBSOCKET_PORT}
     depends_on:
-      - mongo
+      - mongoeasyroad
     links:
-      - mongo
+      - mongoeasyroad
     env_file:
       - .env
     ports:
