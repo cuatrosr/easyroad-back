@@ -125,7 +125,8 @@ export class MongoPolesRepository implements PolesRepository {
     return await this.poleModel
       .findByIdAndUpdate(id, { isActive: false }, { new: true })
       .exec()
-      .catch(() => {
+      .catch((e) => {
+        this.logger.error(`error: ${e}`);
         this.logger.error(`[Back] Error en la base de datos`);
         return HttpMongoError('Error en la base de datos');
       });
