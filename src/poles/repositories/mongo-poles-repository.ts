@@ -42,6 +42,7 @@ export class MongoPolesRepository implements PolesRepository {
   async findByProject(project: string) {
     return await this.poleModel
       .find({ project, isActive: true })
+      .sort({ created: -1 })
       .exec()
       .catch(() => {
         this.logger.error(`[Back] Error en la base de datos`);

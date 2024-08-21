@@ -1,5 +1,6 @@
-import { EventService } from './event.service';
+import { obtenerMensajeEstado } from 'src/utils/enums/tipo-evento.enum';
 import { Controller, HttpCode, Logger, Inject, Get } from '@nestjs/common';
+import { EventService } from './event.service';
 import {
   ApiInternalServerErrorResponse,
   ApiOkResponse,
@@ -24,7 +25,16 @@ export class EventController {
   @Get()
   async findAllEvents() {
     this.logger.log('[Back] Event endpoint called!');
-    const events = await this.eventService.findAllEvents();
+    let events = await this.eventService.findAllEvents();
+    events = events.map((event) => {
+      return {
+        ...event,
+        estado_evento: obtenerMensajeEstado(
+          event.tipo_evento,
+          event.estado_evento,
+        ),
+      };
+    });
     this.logger.log('[Back] Retornando todos los eventos');
     return events;
   }
@@ -38,9 +48,18 @@ export class EventController {
   })
   @Get('alerts')
   async findAllAlerts() {
-    this.logger.log('[Back] Event endpoint called!');
-    const events = await this.eventService.findAllAlerts();
+    this.logger.log('[Back] Alert endpoint called!');
+    let alerts = await this.eventService.findAllAlerts();
+    alerts = alerts.map((alert) => {
+      return {
+        ...alert,
+        estado_evento: obtenerMensajeEstado(
+          alert.tipo_evento,
+          alert.estado_evento,
+        ),
+      };
+    });
     this.logger.log('[Back] Retornando todas las alertas');
-    return events;
+    return alerts;
   }
 }
