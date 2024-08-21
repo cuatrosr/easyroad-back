@@ -23,6 +23,7 @@ export class MongoEventRepository implements EventRepository {
   async findAllEvents() {
     return await this.eventModel
       .find({ tipo_notificacion: TipoNotificacion.EVENTO })
+      .sort({ created: -1 })
       .exec()
       .catch(() => {
         this.logger.error(`[Back] Error en la base de datos`);
@@ -33,6 +34,7 @@ export class MongoEventRepository implements EventRepository {
   async findAllAlerts() {
     return await this.eventModel
       .find({ tipo_notificacion: TipoNotificacion.ALERTA })
+      .sort({ created: -1 })
       .exec()
       .catch(() => {
         this.logger.error(`[Back] Error en la base de datos`);

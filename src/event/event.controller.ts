@@ -25,18 +25,21 @@ export class EventController {
   @Get()
   async findAllEvents() {
     this.logger.log('[Back] Event endpoint called!');
-    let events = await this.eventService.findAllEvents();
-    events = events.map((event) => {
-      return {
-        ...event,
-        estado_evento: obtenerMensajeEstado(
-          event.tipo_evento,
-          event.estado_evento,
-        ),
-      };
-    });
+    const events = await this.eventService.findAllEvents();
     this.logger.log('[Back] Retornando todos los eventos');
-    return events;
+    return events.map((event) => {
+      const eventDTO: any = {};
+      eventDTO.created = event.created;
+      eventDTO.uuid_evento = event.uuid_evento;
+      eventDTO.tipo_evento = event.tipo_evento;
+      eventDTO.estado_evento = obtenerMensajeEstado(
+        event.tipo_evento,
+        event.estado_evento,
+      );
+      eventDTO.serial_dispositivo = event.serial_dispositivo;
+      eventDTO.tipo_notificacion = event.tipo_notificacion;
+      return eventDTO;
+    });
   }
 
   @HttpCode(200)
@@ -49,17 +52,20 @@ export class EventController {
   @Get('alerts')
   async findAllAlerts() {
     this.logger.log('[Back] Alert endpoint called!');
-    let alerts = await this.eventService.findAllAlerts();
-    alerts = alerts.map((alert) => {
-      return {
-        ...alert,
-        estado_evento: obtenerMensajeEstado(
-          alert.tipo_evento,
-          alert.estado_evento,
-        ),
-      };
-    });
+    const alerts = await this.eventService.findAllAlerts();
     this.logger.log('[Back] Retornando todas las alertas');
-    return alerts;
+    return alerts.map((alerta) => {
+      const alertaDTO: any = {};
+      alertaDTO.created = alerta.created;
+      alertaDTO.uuid_evento = alerta.uuid_evento;
+      alertaDTO.tipo_evento = alerta.tipo_evento;
+      alertaDTO.estado_evento = obtenerMensajeEstado(
+        alerta.tipo_evento,
+        alerta.estado_evento,
+      );
+      alertaDTO.serial_dispositivo = alerta.serial_dispositivo;
+      alertaDTO.tipo_notificacion = alerta.tipo_notificacion;
+      return alertaDTO;
+    });
   }
 }
