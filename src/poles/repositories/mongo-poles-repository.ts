@@ -1,4 +1,7 @@
-import { HttpMongoError } from '../../utils/exceptions/http.exception';
+import {
+  HttpBadRequest,
+  HttpMongoError,
+} from '../../utils/exceptions/http.exception';
 import { CreatePoleDTO, UpdatePoleDTO } from '../dtos/pole.dto';
 import { Pole, PoleModel } from '../schemas/pole.schema';
 import { PolesRepository } from './poles-repository';
@@ -13,7 +16,16 @@ export class MongoPolesRepository implements PolesRepository {
   ) {}
 
   async createPole(createPoleDTO: CreatePoleDTO) {
-    return await this.poleModel.create(createPoleDTO).catch(() => {
+    return await this.poleModel.create(createPoleDTO).catch((error) => {
+      if (error.code === 11000) {
+        if (error.message.includes('serial')) {
+          this.logger.warn('[Back] El Serial del poste ya existe');
+          return HttpBadRequest('El serial ya existe');
+        } else if (error.message.includes('name')) {
+          this.logger.warn('[Back] El Nombre del poste ya existe');
+          return HttpBadRequest('El name ya existe');
+        }
+      }
       this.logger.error(`[Back] Error en la base de datos`);
       return HttpMongoError('Error en la base de datos');
     });
